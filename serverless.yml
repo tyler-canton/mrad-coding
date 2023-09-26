@@ -1,0 +1,30 @@
+service: divvybikes-lambda
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:PutObject"
+      Resource:
+        Fn::Sub: "arn:aws:s3:::${AWS::StackName}-bucket/*"
+
+functions:
+  API_GATEWAY_LAMBDA:
+    handler: handler.handler
+    events:
+      - http:
+          path: /
+          method: get
+    environment:
+       BUCKET_NAME: !Ref MyS3Bucket
+
+resources:
+  Resources:
+    MyS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: 
+          Fn::Sub: "${AWS::StackName}-bucket"
