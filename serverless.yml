@@ -14,6 +14,7 @@ provider:
 functions:
   API_GATEWAY_LAMBDA:
     handler: handler.handler
+    timeout: 30
     events:
       - http:
           path: /
