@@ -20,7 +20,9 @@ functions:
           path: /
           method: get
     environment:
-       BUCKET_NAME: !Ref MyS3Bucket
+      BUCKET_NAME: !Ref MyS3Bucket
+      LAMBDA_FUNCTION_NAME: ${self:service}-${opt:stage, self:provider.stage}-API_GATEWAY_LAMBDA
+
 
 resources:
   Resources:
