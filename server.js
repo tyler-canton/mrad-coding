@@ -13,7 +13,7 @@ const init = async () => {
     path: '/',
     handler: async (request, h) => {
       try {
-        const lambdaFunctionName = process.env.LAMBDA_FUNCTION_NAME;
+        const lambdaFunctionName = process.env.LAMBDA_FUNC_NAME;
 
         // Invoke Lambda function
         const lambdaParams = {

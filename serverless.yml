@@ -2,7 +2,8 @@ service: divvybikes-lambda
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'} # Default stage is 'dev'
   region: us-east-1
   iamRoleStatements:
     - Effect: "Allow"
@@ -10,7 +11,12 @@ provider:
         - "s3:PutObject"
       Resource:
         Fn::Sub: "arn:aws:s3:::${AWS::StackName}-bucket/*"
-
+custom:
+  globalSchedule: rate(10 minutes)
+  serviceName: ${self:service}
+  exportName: ${self:custom.serviceName}-${self:provider.stage}
+  lambdaName: ${self:custom.exportName}-API_GATEWAY_LAMBDA
+  
 functions:
   API_GATEWAY_LAMBDA:
     handler: handler.handler
@@ -21,7 +27,7 @@ functions:
           method: get
     environment:
       BUCKET_NAME: !Ref MyS3Bucket
-      LAMBDA_FUNCTION_NAME: ${self:service}-${opt:stage, self:provider.stage}-API_GATEWAY_LAMBDA
+      LAMBDA_FUNC_NAME: ${self:service}-${self:provider.stage}-API_GATEWAY_LAMBDA
 
 
 resources:
