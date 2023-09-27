@@ -1,5 +1,7 @@
 const Hapi = require('@hapi/hapi');
 const AWS = require('aws-sdk');
+AWS.config.update({region: 'us-east-1'}); // replace 'us-east-1' with your region
+
 const lambda = new AWS.Lambda();
 
 const init = async () => {
@@ -13,11 +15,9 @@ const init = async () => {
     path: '/',
     handler: async (request, h) => {
       try {
-        const lambdaFunctionName = process.env.LAMBDA_FUNC_NAME;
 
-        // Invoke Lambda function
         const lambdaParams = {
-          FunctionName: lambdaFunctionName,
+          FunctionName: 'divvybikes-lambda-dev-API_GATEWAY_LAMBDA',
           InvocationType: 'RequestResponse',
         };
         const lambdaResponse = await lambda.invoke(lambdaParams).promise();
